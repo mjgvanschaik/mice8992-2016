@@ -8,20 +8,27 @@ output:
   pdf_document:
     fig_width: 6
     fig_height: 6
+editor_options: 
+  chunk_output_type: console
 ---
 Back to [Table of Contents](../../doc/index.html)  
 
 **All of the code in this page is meant to be run in ```R``` unless otherwise specified.**
 
-Install biom package and vegan package if not installed.
+Install biomformat package and vegan package if not installed.
+
 ```{r eval=FALSE}
-install.packages(c('biom','vegan'),repo='http://cran.wustl.edu')
+install.packages('vegan')
+## try http:// if https:// URLs are not supported
+source("https://bioconductor.org/biocLite.R")
+biocLite("biomformat")
+biocLite("phyloseq")
 ```
 
-Load biom package, load data
+Load packages, load data
 ```{r, eval=TRUE}
-library('biom')
-library('vegan')
+require(biomformat)
+require(vegan)
 
 # load biom file
 otus.biom <- read_biom('otu_table_json.biom')
@@ -61,7 +68,7 @@ dim(map)
 ```
 
 
-Get three different distances metrics
+Get three different distances metrics from the (supposedly unrarefied) OTU counts
 ```{r, eval=TRUE}
 
 # get Euclidean distance
@@ -98,7 +105,7 @@ my.colors <- colorRampPalette(c('red','blue'))(10)
 # plot Euclidean PCoA coords using color gradient
 # based on layer (1...10)
 layer <- map[,'LAYER']
-plot(pc.euc[,1], pc.euc[,2], col=my.colors[layer], cex=3, pch=16)
+plot(pc.euc[,1], pc.euc[,2], col=my.colors[layer$LAYER], cex=3, pch=16)
 ```
 
 Plot Bray-Curtis distances with gradient colors
